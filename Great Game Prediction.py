@@ -11,7 +11,7 @@ from sklearn.metrics import roc_auc_score
 from sklearn import metrics
 from matplotlib import pyplot as plt
 import itertools
-start = time.time()
+
 pd.set_option('display.max_columns', None)
 df = pd.read_csv('appstore_games.csv')
 
@@ -48,7 +48,7 @@ def plot_confusion_matrix(cm, classes,
         plt.tight_layout()
         plt.ylabel('True label')
         plt.xlabel('Predicted label')
-        plt.show()
+      #  plt.show()
 def in_app_p(row):
 
     x=row["In-app Purchases"]
@@ -104,6 +104,7 @@ X_test.to_csv('xtest.csv',index=False)
 y_train.to_csv('ytrain.csv',index=False)
 y_test.to_csv('ytest.csv',index=False)
 
+
 rf = RandomForestClassifier(n_estimators=100)
 
 param_grid = {
@@ -120,8 +121,9 @@ cv_rf.fit(X_train,y_train)
 
 
 final_model = cv_rf.best_estimator_
+start = time.time()
 final_model.fit(X_train,y_train)
-
+end = time.time()
 filename_RandomForest = 'RandomForest_model.sav'
 pickle.dump(final_model, open(filename_RandomForest, 'wb'))
 
@@ -139,8 +141,9 @@ plot_confusion_matrix(cmatrix_rf, classes=['True', 'False'], title='Random Fores
 print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
 
 model = DecisionTreeClassifier()
+startdt = time.time()
 model.fit(X_train, y_train)
-
+enddt = time.time()
 filename_DecisionTree = 'DecisionTree_model.sav'
 pickle.dump(model, open(filename_DecisionTree, 'wb'))
 
@@ -153,5 +156,6 @@ plot_confusion_matrix(cmatrix_dt, classes=['True', 'False'], title='Decision Tre
 
 
 
-end = time.time()
-print(f"Runtime of the program is {end - start}")
+
+print(f"Runtime of the Random Forest is {end - start}")
+print(f"Runtime of the Decision tree is {enddt - startdt}")
