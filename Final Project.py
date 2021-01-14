@@ -57,9 +57,23 @@ def plot_confusion_matrix(cm, classes,
 df2.info()
 maxcol=df2.max()
 print(maxcol)
+
+
+
 X=df2.drop(columns=["Great_App"])
 y=df2["Great_App"]
-
+item_counts = df2["Great_App"].value_counts()
+print(item_counts)
+df = pd.DataFrame({'Classes':[1,0], 'Number of Occurences':[3851,3710]})
+ax = df.plot.bar(x='Classes', y='Number of Occurences', rot=0)
+ax.set_title("Great_App Column")
+for n in ax.patches:
+    ax.annotate(np.round(n.get_height(),decimals=2),
+                (n.get_x()+n.get_width()/2., n.get_height()),
+                ha='center',
+                va='center',
+                xytext=(0, 10),
+                textcoords='offset points')
 
 X_train = pd.read_csv('xtrain.csv')
 X_test = pd.read_csv('xtest.csv')
